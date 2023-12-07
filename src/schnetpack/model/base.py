@@ -55,10 +55,6 @@ class AtomisticModel(nn.Module):
                 # apply postprocessing (if enabled)
                 inputs = self.postprocess(inputs)
                 print("inside the forward function")
-                print("inside the forward function")
-                print("inside the forward function")
-                print("inside the forward function")
-                print("inside the forward function")
 
                 return inputs
 
