@@ -54,8 +54,6 @@ class AtomisticModel(nn.Module):
 
                 # apply postprocessing (if enabled)
                 inputs = self.postprocess(inputs)
-                print("inside the forward function")
-
                 return inputs
 
     """
@@ -146,6 +144,7 @@ class NeuralNetworkPotential(AtomisticModel):
         postprocessors: Optional[List[Transform]] = None,
         input_dtype_str: str = "float32",
         do_postprocessing: bool = True,
+        pretrain: bool = False,
     ):
         """
         Args:
@@ -167,7 +166,7 @@ class NeuralNetworkPotential(AtomisticModel):
         self.representation = representation
         self.input_modules = nn.ModuleList(input_modules)
         self.output_modules = nn.ModuleList(output_modules)
-
+        self.pretrain = pretrain
         self.collect_derivatives()
         self.collect_outputs()
 
@@ -179,9 +178,16 @@ class NeuralNetworkPotential(AtomisticModel):
             inputs = m(inputs)
 
         inputs = self.representation(inputs)
+        # print("After self.representation")
+        # print(inputs['scalar_representation'])
 
         for m in self.output_modules:
             inputs = m(inputs)
+        # print("After output_modules")
+        # print(inputs['scalar_representation'])
+        
+        if self.pretrain == True:
+            return inputs
 
         # apply postprocessing (if enabled)
         inputs = self.postprocess(inputs)
