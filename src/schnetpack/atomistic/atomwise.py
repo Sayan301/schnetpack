@@ -8,7 +8,46 @@ import schnetpack as spk
 import schnetpack.nn as snn
 import schnetpack.properties as properties
 
-__all__ = ["Atomwise", "AtomClassifier", "DipoleMoment", "Polarizability"]
+__all__ = ["Atomwise", "AtomClassifier", "DipoleMoment", "Polarizability", "DenoisingEncoder"]
+
+class DenoisingEncoder(nn.Module):
+    """
+    Predicts atom-wise contributions and accumulates global prediction, e.g. for the energy.
+
+    If `aggregation_mode` is None, only the per-atom predictions will be returned.
+    """
+
+    def __init__(
+        self,
+        n_in: int,
+        n_out: int,
+        n_hidden: Optional[Union[int, Sequence[int]]] = None,
+        n_layers: int = None,
+        output_key: str = "y",
+    ):
+        """
+        Args:
+            n_in: input dimension of representation
+            n_out: output dimension of target property (default: 1)
+            n_hidden: size of hidden layers.
+                If an integer, same number of node is used for all hidden layers resulting
+                in a rectangular network.
+                If None, the number of neurons is divided by two after each layer starting
+                n_in resulting in a pyramidal network.
+            n_layers: number of layers.
+            output_key: the key under which the result will be stored
+        """
+        super(DenoisingEncoder, self).__init__()
+        self.output_key = output_key
+        self.model_outputs = [output_key]
+        self.outnet = nn.Linear(n_in, n_out)
+
+    def forward(self, inputs: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+        # predict atomwise contributions
+        y = self.outnet(inputs["scalar_representation"])
+        inputs[self.output_key] = y
+
+        return inputs
 
 class AtomClassifier(nn.Module):
     """
