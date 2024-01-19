@@ -172,11 +172,11 @@ class NeuralNetworkPotential(AtomisticModel):
 
     def forward(self, inputs: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
         # initialize derivatives for response properties
-        inputs = self.initialize_derivatives(inputs)
 
+        inputs = self.initialize_derivatives(inputs)
         for m in self.input_modules:
             inputs = m(inputs)
-
+            
         inputs = self.representation(inputs)
         # print("After self.representation")
         # print(inputs['scalar_representation'])
