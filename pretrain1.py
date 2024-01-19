@@ -165,7 +165,8 @@ def training(qm9data, outputlabels):
         # outputs=[output_energy],
         pretrain_labels = outputlabels,
         optimizer_cls=torch.optim.AdamW,
-        optimizer_args={"lr": 1e-4}
+        optimizer_args={"lr": 1e-4},
+        logfile = '/home/sayan/Documents/schnetmod/schnetpack/atom_pretrain.csv'
     )
 
 
@@ -182,7 +183,7 @@ def training(qm9data, outputlabels):
         callbacks=callbacks,
         logger=logger,
         default_root_dir=qm9tut,
-        max_epochs=100, # for testing, we restrict the number of epochs
+        max_epochs=3, # for testing, we restrict the number of epochs
     )
 
     #Training
@@ -228,6 +229,10 @@ if __name__=='__main__':
     if os.path.exists(filename):
         os.remove(filename)
         print("Removed split.npz file")
+
+    logfile = '/home/sayan/Documents/schnetmod/schnetpack/atom_pretrain.csv'
+    if os.path.exists(logfile):
+        os.remove(logfile)
 
     qm9data = getDataset(qm9tut)
     printDataInfo(qm9data)

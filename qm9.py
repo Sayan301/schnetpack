@@ -134,7 +134,7 @@ def training(qm9data):
         model=nnpot,
         outputs=[output_U0],
         # outputs=[output_energy],
-
+        logfile='/home/sayan/Documents/schnetmod/schnetpack/schnet.csv',
         optimizer_cls=torch.optim.AdamW,
         optimizer_args={"lr": 1e-4}
     )
@@ -219,6 +219,10 @@ if __name__=='__main__':
         os.remove(filename)
         print("Removed split.npz file")
 
+    logfile = '/home/sayan/Documents/schnetmod/schnetpack/schnet.csv'
+    if os.path.exists(logfile):
+        os.remove(logfile)
+        
     qm9data = getDataset(qm9tut)
     printDataInfo(qm9data)
     print("-----TRAINING PHASE-----")
