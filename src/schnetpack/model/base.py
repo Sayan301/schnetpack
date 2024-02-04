@@ -178,12 +178,12 @@ class NeuralNetworkPotential(AtomisticModel):
             inputs = m(inputs)
             
         inputs = self.representation(inputs)
-        # print("After self.representation")
+        print("After self.representation")
         # print(inputs['scalar_representation'])
 
         for m in self.output_modules:
             inputs = m(inputs)
-        # print("After output_modules")
+        print("After output_modules")
         # print(inputs['scalar_representation'])
         
         if self.pretrain == True:
