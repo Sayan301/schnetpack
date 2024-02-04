@@ -397,7 +397,7 @@ class AtomisticPretrain(pl.LightningModule):
         return truelabels
 
     def training_step(self, batch, batch_idx):
-
+        print("INSIDE TRAINING STEP OF TASK.PY")
         # targets = {
         #     output.target_property: batch[output.target_property]
         #     for output in self.outputs
